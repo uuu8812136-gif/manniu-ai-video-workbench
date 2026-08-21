@@ -127,6 +127,8 @@ pnpm package:audit
 
 `tests/local-api-e2e.test.ts` 使用真实的 `127.0.0.1` HTTP 服务覆盖兼容推理、图片生成、视频提交/轮询/下载、同一 SQLite 项目回写和真实文件落盘。`tests/original-agent-real.test.ts` 可通过 `RUN_REAL_CLAUDE_AGENT=1` 启用，使用随包 `claude.exe` 和本地协议服务验证真实 `Write/Edit/Bash` 文件工具循环。
 
+本轮源码复核结果：`pnpm typecheck` 通过；`pnpm test` 共执行 562 项，其中 557 项通过、2 项跳过，`tests/package-source-contract.test.ts` 的 3 项失败均发生在测试通过 `powershell.exe` 子进程调用 `Get-FileHash` 时的当前机器命令环境，不是 TypeScript 编译错误。历史交付记录中的构建、打包审计和 Windows 烟测结果保留在版本报告中，不能替代本轮测试结果。
+
 Vidu 相关测试覆盖请求协议、历史任务匹配、账号会话隔离、主体素材缓存、任务状态恢复、21 分钟恢复租约、5/15/60 分钟退避、删除保护、重复提交保护和视频下载校验。真实 Vidu 账号的登录检查需要在应用的独立 Vidu 窗口中完成；真实生成任务会消耗账号积分，不属于默认自动测试。
 
 ## 已知交付边界
@@ -140,6 +142,6 @@ Vidu 相关测试覆盖请求协议、历史任务匹配、账号会话隔离、
 
 ## 交付状态
 
-- 源码版本：`0.8.22`，已完成类型检查、全量自动测试、生产构建、ASAR 审计和 Windows 安装/启动/SQLite 烟测。
+- 源码版本：`0.8.22`；本轮类型检查通过，自动测试结果见“验证”章节；历史版本报告记录了生产构建、ASAR 审计和 Windows 安装/启动/SQLite 烟测证据。
 - 默认测试不提交真实 Vidu 视频任务，不消耗客户积分；真实账号登录、付费视频生成和目标剪映版本导入仍由客户在自己的环境中验收。
 - 历史 `AI工具交付与验收报告-*.md`、`ORIGINAL-PARITY-AUDIT-*.md` 和 `UI-PARITY-MATRIX-*.md` 用于记录开发过程，不代表每一项都是本次重新执行的测试。
