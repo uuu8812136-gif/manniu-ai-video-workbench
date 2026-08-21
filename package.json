@@ -1,0 +1,70 @@
+{
+  "name": "ai-tool",
+  "version": "0.8.22",
+  "description": "本地优先的 AI 视频创作工作台",
+  "main": "./out/main/index.js",
+  "author": "Local Workspace",
+  "license": "UNLICENSED",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "postinstall": "node scripts/ensure-electron.cjs",
+    "electron:ensure": "node scripts/ensure-electron.cjs",
+    "predev": "pnpm electron:ensure",
+    "dev": "electron-vite dev",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "build": "pnpm typecheck && electron-vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "package:clean": "node scripts/clean-package-output.cjs",
+    "package:dir": "pnpm electron:ensure && pnpm build && pnpm package:clean && electron-builder --config electron-builder.yml --win --x64 --dir --publish never && pnpm package:audit && pnpm package:smoke && pnpm package:smoke:offline && pnpm package:smoke:crash",
+    "package:nsis": "pnpm electron:ensure && pnpm build && pnpm package:clean && electron-builder --config electron-builder.yml --win nsis --x64 --publish never && pnpm package:audit && pnpm package:smoke && pnpm package:smoke:installed && pnpm package:checksums",
+    "package:portable": "pnpm electron:ensure && pnpm build && pnpm package:clean && electron-builder --config electron-builder.yml --win portable --x64 --publish never && pnpm package:audit && pnpm package:smoke:portable && pnpm package:checksums",
+    "package:all": "pnpm electron:ensure && pnpm build && pnpm package:clean && electron-builder --config electron-builder.yml --win nsis portable --x64 --publish never && pnpm package:audit && pnpm package:smoke && pnpm package:smoke:offline && pnpm package:smoke:crash && pnpm package:smoke:portable && pnpm package:smoke:installed && pnpm package:source && pnpm package:checksums",
+    "package:audit": "node scripts/audit-package.cjs",
+    "package:smoke": "node scripts/smoke-packaged.cjs",
+    "package:smoke:offline": "node scripts/smoke-packaged-offline.cjs",
+    "package:smoke:crash": "node scripts/smoke-packaged-crash-recovery.cjs",
+    "package:smoke:portable": "node scripts/smoke-portable.cjs",
+    "package:smoke:installed": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/smoke-installed.ps1",
+    "package:source": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-source-release.ps1",
+    "package:checksums": "node scripts/checksum-artifacts.cjs",
+    "audit:interactions": "node scripts/audit-current-interactions.cjs",
+    "pack": "pnpm package:dir",
+    "dist": "pnpm package:all"
+  },
+  "dependencies": {
+    "better-sqlite3": "13.0.1",
+    "cheerio": "1.1.2",
+    "jszip": "3.10.1",
+    "lucide-react": "0.468.0",
+    "mammoth": "1.10.0",
+    "papaparse": "5.5.3",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "zod": "4.3.6",
+    "zustand": "5.0.11"
+  },
+  "devDependencies": {
+    "@electron-toolkit/utils": "4.0.0",
+    "@electron/asar": "3.4.1",
+    "@types/better-sqlite3": "7.6.13",
+    "@types/node": "24.10.0",
+    "@types/papaparse": "5.3.16",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "@vitejs/plugin-react": "5.0.4",
+    "electron": "43.2.0",
+    "electron-builder": "26.15.3",
+    "electron-vite": "5.0.0",
+    "typescript": "5.9.3",
+    "vite": "7.1.12",
+    "vitest": "3.2.4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "electron"
+    ]
+  }
+}
